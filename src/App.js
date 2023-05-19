@@ -5,11 +5,13 @@ import SearchBar from "./components/SearchBar";
 function App() {
   const [employeeData, setEmployeeData] = useState([]);
   const [filteredEmployeeData, setFilteredEmployeeList] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [searchCategory, setSearchCategory] = useState("name");
 
   const [query, setQuery] = useState("");
 
   const fetchData = () => {
+    setLoading(true);
     var requestOptions = {
       method: "GET",
       redirect: "follow",
@@ -23,8 +25,12 @@ function App() {
       .then((result) => {
         setEmployeeData(result?.employees);
         setFilteredEmployeeList(result?.employees);
+        setLoading(false);
       })
-      .catch((error) => console.log("error", error));
+      .catch((error) => {
+        console.log("error", error);
+        setLoading(false);
+      });
   };
 
   const filterEmployeesByName = (event, searchCategory) => {
@@ -75,6 +81,7 @@ function App() {
         />
       </div>
       <div className="mt-2  p-2 rounded">
+        {loading && <p>loading...</p>}
         {filteredEmployeeData?.map((employee) => {
           return (
             <EmployeeCard

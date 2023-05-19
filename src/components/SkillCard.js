@@ -7,7 +7,7 @@ const SkillsCard = ({ skillstoShow }) => {
           return (
             <span
               key={skill}
-              className="bg-gray-50 rounded-xl shadow text-xs px-2 py-0.5 "
+              className="bg-gray-50 rounded-xl shadow text-xs px-2 py-0.5 text-gray-600 font-semibold"
             >
               {skill}
             </span>
