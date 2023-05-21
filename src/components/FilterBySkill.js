@@ -21,7 +21,12 @@ const FilterBySkill = ({
               <input
                 type="checkbox"
                 key={skill}
-                onClick={() => {
+                isChecked={() => {
+                  let tempArray = [...skillQuery];
+                  let skillIndex = tempArray.indexOf(skill);
+                  return skillIndex != -1;
+                }}
+                onClick={(e) => {
                   let tempArray = [...skillQuery];
                   let skillIndex = tempArray.indexOf(skill);
                   if (skillIndex === -1) {

@@ -15,6 +15,10 @@ function App() {
 
   const [skillSet, setSkillSet] = useState([]);
 
+  const [showFilter, setShowFilter] = useState(false);
+
+  const [resetFilter, setResetFilter] = useState(false);
+
   const fetchData = () => {
     setLoading(true);
     var requestOptions = {
@@ -99,6 +103,12 @@ function App() {
     setFilteredEmployeeList(updatedList);
   };
 
+  const handleReset = () => {
+    setQuery("");
+    setSkillQuery("");
+    setFilteredEmployeeList(employeeData);
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -114,12 +124,28 @@ function App() {
           setSearchCategory={setSearchCategory}
         />
 
-        <FilterBySkill
-          setSkillQuery={setSkillQuery}
-          skillQuery={skillQuery}
-          skills={skillSet}
-          filterEmployeesByName={filterEmployeesByName}
-        />
+        <div className="p-2 flex gap-2 ">
+          <button
+            onClick={() => handleReset()}
+            className="bg-red-600 text-white px-2 rounded-lg "
+          >
+            Reset
+          </button>
+          <button
+            onClick={() => setShowFilter(!showFilter)}
+            className="bg-blue-600 text-white px-2 rounded-lg"
+          >
+            Filter
+          </button>
+        </div>
+        {showFilter && (
+          <FilterBySkill
+            setSkillQuery={setSkillQuery}
+            skillQuery={skillQuery}
+            skills={skillSet}
+            filterEmployeesByName={filterEmployeesByName}
+          />
+        )}
       </div>
       <div className="mt-2  p-2 rounded">
         {loading && <p>loading...</p>}
