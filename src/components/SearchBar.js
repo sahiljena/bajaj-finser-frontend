@@ -17,13 +17,17 @@ const SearchBar = ({
           Name
         </option>
         <option value="designation">Designation</option>
-        <option value="skill">Skill</option>
+        {/* <option value="skill">Skill</option> */}
       </select>
       <input
         placeholder={`type  ${searchCategory} here `}
         type="search"
-        onChange={(e) => filterEmployeesByName(e, searchCategory)}
-        className="border w-full rounded-r-lg p-2 text-xl outline-0 shadow"
+        onChange={(e) => {
+          setQuery(e.target.value);
+          filterEmployeesByName(e, searchCategory);
+        }}
+        value={query}
+        className="border w-full rounded-r-lg p-2 text-xl outline-0 shadow W-8/12"
       />
     </div>
   );

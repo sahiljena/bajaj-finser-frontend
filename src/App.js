@@ -59,7 +59,7 @@ function App() {
   const filterEmployeesByName = (event, searchCategory, tempArray) => {
     const query = event === -1 ? "" : event.target.value;
     var updatedList =
-      skillQuery.length > 0 ? [...filteredEmployeeData] : [...employeeData];
+      skillQuery?.length > 0 ? [...filteredEmployeeData] : [...employeeData];
     if (searchCategory === "name") {
       updatedList = updatedList?.filter((employee) => {
         console.log(skillQuery, event.target.value);
@@ -82,7 +82,7 @@ function App() {
       updatedList = employeeData.filter((employee) => {
         if (tempArray.length === 0) return true;
         const skills = employee.skills || [];
-        console.log(skills, skills.includes(tempArray));
+        //console.log(skills, skills.includes(tempArray));
 
         for (var i = 0; i < skills.length; i++) {
           for (var j = 0; j < tempArray.length; j++) {
@@ -96,7 +96,7 @@ function App() {
         //   return skill == tempArray.indexOf(skill);
         // });
       });
-      console.log(updatedList);
+      //console.log(updatedList);
       //setFilteredEmployeeList(updatedList);
     }
 
@@ -105,7 +105,7 @@ function App() {
 
   const handleReset = () => {
     setQuery("");
-    setSkillQuery("");
+    //setSkillQuery([]);
     setFilteredEmployeeList(employeeData);
   };
 
@@ -129,7 +129,7 @@ function App() {
             onClick={() => handleReset()}
             className="bg-red-600 text-white px-2 rounded-lg "
           >
-            Reset
+            Reset List
           </button>
           <button
             onClick={() => setShowFilter(!showFilter)}
@@ -144,6 +144,7 @@ function App() {
             skillQuery={skillQuery}
             skills={skillSet}
             filterEmployeesByName={filterEmployeesByName}
+            resetFilter={resetFilter}
           />
         )}
       </div>

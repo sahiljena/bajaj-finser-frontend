@@ -1,14 +1,21 @@
+import { useEffect } from "react";
+
 const FilterBySkill = ({
   skills,
   setSkillQuery,
   skillQuery,
   filterEmployeesByName,
+  resetFilter,
 }) => {
+  useEffect(() => {
+    setSkillQuery([]);
+  }, [resetFilter]);
   return (
     <div className="p-2">
       <p className="text-sm font-semibold text-gray-600">Skills</p>
       <div className="flex gap-2 flex-wrap">
         {skills?.map((skill) => {
+          //const [checked, setChecked] = useState(false);
           return (
             <div
               className={`text-xs ${
@@ -21,11 +28,7 @@ const FilterBySkill = ({
               <input
                 type="checkbox"
                 key={skill}
-                isChecked={() => {
-                  let tempArray = [...skillQuery];
-                  let skillIndex = tempArray.indexOf(skill);
-                  return skillIndex != -1;
-                }}
+                defaultChecked={skillQuery.indexOf(skill) != -1}
                 onClick={(e) => {
                   let tempArray = [...skillQuery];
                   let skillIndex = tempArray.indexOf(skill);
