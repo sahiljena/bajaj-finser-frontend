@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import EmployeeCard from "./components/EmployeeCard";
 import SearchBar from "./components/SearchBar";
-
+import staticEmployeeData from "./sampleTest.json";
+import FilterBySkill from "./components/FilterBySkill";
 function App() {
   const [employeeData, setEmployeeData] = useState([]);
   const [filteredEmployeeData, setFilteredEmployeeList] = useState([]);
@@ -9,6 +10,10 @@ function App() {
   const [searchCategory, setSearchCategory] = useState("name");
 
   const [query, setQuery] = useState("");
+
+  const [skillQuery, setSkillQuery] = useState([]);
+
+  const [skillSet, setSkillSet] = useState([]);
 
   const fetchData = () => {
     setLoading(true);
@@ -25,22 +30,40 @@ function App() {
       .then((result) => {
         setEmployeeData(result?.employees);
         setFilteredEmployeeList(result?.employees);
+
+        let skillSetTemp = [];
+        result?.employees.map((employee) => {
+          employee?.skills?.map((skill) => {
+            skillSetTemp.push(skill);
+          });
+        });
+
+        let tempSet = new Set(skillSetTemp);
+        skillSetTemp = [...tempSet];
+        setSkillSet(skillSetTemp);
         setLoading(false);
       })
       .catch((error) => {
         console.log("error", error);
+        //console.log(staticEmployeeData?.employees);
+        setEmployeeData(staticEmployeeData?.employees);
+        setFilteredEmployeeList(staticEmployeeData?.employees);
         setLoading(false);
       });
   };
 
-  const filterEmployeesByName = (event, searchCategory) => {
-    const query = event.target.value;
-    var updatedList = [...employeeData];
+  const filterEmployeesByName = (event, searchCategory, tempArray) => {
+    const query = event === -1 ? "" : event.target.value;
+    var updatedList =
+      skillQuery.length > 0 ? [...filteredEmployeeData] : [...employeeData];
     if (searchCategory === "name") {
       updatedList = updatedList?.filter((employee) => {
+        console.log(skillQuery, event.target.value);
         return (
           employee?.name &&
-          employee?.name?.toLowerCase().indexOf(query.toLowerCase()) !== -1
+          employee?.name
+            ?.toLowerCase()
+            .indexOf(event.target.value.toLowerCase()) !== -1
         );
       });
     } else if (searchCategory === "designation") {
@@ -53,10 +76,21 @@ function App() {
       });
     } else if (searchCategory === "skill") {
       updatedList = employeeData.filter((employee) => {
+        if (tempArray.length === 0) return true;
         const skills = employee.skills || [];
-        return skills.some((skill) =>
-          skill.toLowerCase().includes(query.toLowerCase())
-        );
+        console.log(skills, skills.includes(tempArray));
+
+        for (var i = 0; i < skills.length; i++) {
+          for (var j = 0; j < tempArray.length; j++) {
+            if (skills[i] == tempArray[j]) return true;
+          }
+        }
+        return false;
+        // return skills.some((skill) => {
+        //   //console.log(skill, tempArray.indexOf(skill));
+        //   //tempArray.includes(skill.toLowerCase());
+        //   return skill == tempArray.indexOf(skill);
+        // });
       });
       console.log(updatedList);
       //setFilteredEmployeeList(updatedList);
@@ -78,6 +112,13 @@ function App() {
           filterEmployeesByName={filterEmployeesByName}
           searchCategory={searchCategory}
           setSearchCategory={setSearchCategory}
+        />
+
+        <FilterBySkill
+          setSkillQuery={setSkillQuery}
+          skillQuery={skillQuery}
+          skills={skillSet}
+          filterEmployeesByName={filterEmployeesByName}
         />
       </div>
       <div className="mt-2  p-2 rounded">
